@@ -1,0 +1,5 @@
+{
+  "name": "Concept Art AI Assistant",
+  "description": "An AI assistant that takes natural language descriptions of scenes and generates high-quality concept images by translating the input into structured JSON prompts for precise visual control.",
+  "requestFramePermissions": []
+}
