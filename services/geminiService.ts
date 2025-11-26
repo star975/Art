@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { FiboPrompt } from '../types';
 
@@ -53,11 +54,42 @@ const fiboPromptSchema = {
   required: ["scene", "camera", "style", "rendering", "finalPrompt"]
 };
 
-export const generateFiboJsonPrompt = async (description: string): Promise<FiboPrompt> => {
+export const generateFiboJsonPrompt = async (
+  description: string,
+  options?: { 
+    timeOfDay?: string; 
+    weather?: string;
+    cameraAngle?: string;
+    cameraFov?: string;
+    artisticStyle?: string;
+  }
+): Promise<FiboPrompt> => {
   try {
+    let promptText = `Translate the following scene description into a structured JSON object that conforms to the provided schema. Act as a professional concept art director. Identify key subjects or objects from the description and list them in the 'subjects' array. The finalPrompt should be a rich, single-sentence description for an image generator that incorporates all elements.\n\nScene: "${description}"`;
+
+    if (options?.timeOfDay && options.timeOfDay !== 'auto') {
+      promptText += `\nConstraint: Set scene.timeOfDay to '${options.timeOfDay}'.`;
+    }
+    
+    if (options?.weather && options.weather !== 'auto') {
+      promptText += `\nConstraint: Set scene.weather to '${options.weather}'.`;
+    }
+
+    if (options?.cameraAngle && options.cameraAngle !== 'auto') {
+      promptText += `\nConstraint: Set camera.angle to '${options.cameraAngle}'.`;
+    }
+
+    if (options?.cameraFov && options.cameraFov !== 'auto') {
+      promptText += `\nConstraint: Set camera.fov to '${options.cameraFov}'.`;
+    }
+
+    if (options?.artisticStyle && options.artisticStyle !== 'auto') {
+      promptText += `\nConstraint: Set style.artisticStyle to '${options.artisticStyle}'.`;
+    }
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `Translate the following scene description into a structured JSON object that conforms to the provided schema. Act as a professional concept art director. Identify key subjects or objects from the description and list them in the 'subjects' array. The finalPrompt should be a rich, single-sentence description for an image generator that incorporates all elements. Scene: "${description}"`,
+      contents: promptText,
       config: {
         responseMimeType: "application/json",
         responseSchema: fiboPromptSchema,

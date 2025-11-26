@@ -6,10 +6,16 @@ import { ImageGallery } from './components/ImageGallery';
 import { Loader } from './components/Loader';
 import { Icon } from './components/Icon';
 import { generateFiboJsonPrompt, generateImagesFromPrompt } from './services/geminiService';
-import { FiboPrompt, GenerationState } from './types';
+import { FiboPrompt, GenerationState, TimeOfDay, Weather, CameraAngle, CameraFov, ArtisticStyle } from './types';
 
 const App: React.FC = () => {
   const [prompt, setPrompt] = useState<string>('');
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay | 'auto'>('auto');
+  const [weather, setWeather] = useState<Weather | 'auto'>('auto');
+  const [cameraAngle, setCameraAngle] = useState<CameraAngle | 'auto'>('auto');
+  const [cameraFov, setCameraFov] = useState<CameraFov | 'auto'>('auto');
+  const [artisticStyle, setArtisticStyle] = useState<ArtisticStyle | 'auto'>('auto');
+  
   const [generationState, setGenerationState] = useState<GenerationState>(GenerationState.IDLE);
   const [error, setError] = useState<string | null>(null);
   const [generatedJson, setGeneratedJson] = useState<FiboPrompt | null>(null);
@@ -27,7 +33,13 @@ const App: React.FC = () => {
 
     try {
       // Step 1: Generate JSON blueprint
-      const fiboPrompt = await generateFiboJsonPrompt(prompt);
+      const fiboPrompt = await generateFiboJsonPrompt(prompt, { 
+        timeOfDay, 
+        weather,
+        cameraAngle,
+        cameraFov,
+        artisticStyle
+      });
       setGeneratedJson(fiboPrompt);
 
       // Step 2: Generate Images
@@ -40,7 +52,7 @@ const App: React.FC = () => {
       setError(err.message || 'An unknown error occurred.');
       setGenerationState(GenerationState.ERROR);
     }
-  }, [prompt, isLoading]);
+  }, [prompt, timeOfDay, weather, cameraAngle, cameraFov, artisticStyle, isLoading]);
   
   const getLoaderMessage = () => {
     switch (generationState) {
@@ -58,7 +70,7 @@ const App: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">
-            Concept Art AI Assistant
+            STAR ART AI ASSISTANT
           </h1>
           <p className="mt-2 text-slate-400 max-w-2xl mx-auto">
             Describe a scene and watch as AI translates your words into a detailed JSON blueprint and generates stunning visual concepts.
@@ -74,6 +86,16 @@ const App: React.FC = () => {
             <PromptInput
               prompt={prompt}
               setPrompt={setPrompt}
+              timeOfDay={timeOfDay}
+              setTimeOfDay={setTimeOfDay}
+              weather={weather}
+              setWeather={setWeather}
+              cameraAngle={cameraAngle}
+              setCameraAngle={setCameraAngle}
+              cameraFov={cameraFov}
+              setCameraFov={setCameraFov}
+              artisticStyle={artisticStyle}
+              setArtisticStyle={setArtisticStyle}
               onSubmit={handleSubmit}
               isLoading={isLoading}
             />

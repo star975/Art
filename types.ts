@@ -1,16 +1,23 @@
+
+export type TimeOfDay = 'sunrise' | 'day' | 'sunset' | 'night' | 'golden hour' | 'blue hour';
+export type Weather = 'clear' | 'misty' | 'rainy' | 'stormy' | 'snowy' | 'overcast';
+export type CameraAngle = 'eye-level' | 'low-angle' | 'high-angle' | 'dutch-angle' | 'wide-shot' | 'close-up' | 'drone-shot';
+export type CameraFov = 'narrow' | 'medium' | 'wide' | 'ultra-wide';
+export type ArtisticStyle = 'photorealistic' | 'impressionistic' | 'cel-shaded' | 'concept-art' | 'matte-painting' | 'cinematic';
+
 export interface FiboPrompt {
   scene: {
     environment: string;
     subjects: string[];
-    timeOfDay: 'sunrise' | 'day' | 'sunset' | 'night' | 'golden hour' | 'blue hour';
-    weather: 'clear' | 'misty' | 'rainy' | 'stormy' | 'snowy' | 'overcast';
+    timeOfDay: TimeOfDay;
+    weather: Weather;
   };
   camera: {
-    angle: 'eye-level' | 'low-angle' | 'high-angle' | 'dutch-angle' | 'wide-shot' | 'close-up' | 'drone-shot';
-    fov: 'narrow' | 'medium' | 'wide' | 'ultra-wide';
+    angle: CameraAngle;
+    fov: CameraFov;
   };
   style: {
-    artisticStyle: 'photorealistic' | 'impressionistic' | 'cel-shaded' | 'concept-art' | 'matte-painting' | 'cinematic';
+    artisticStyle: ArtisticStyle;
     lighting: 'dramatic' | 'soft' | 'flat' | 'rim-lighting' | 'neon' | 'volumetric';
     palette: 'warm' | 'cool' | 'vibrant' | 'monochromatic' | 'pastel' | 'muted';
   };
